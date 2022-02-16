@@ -14,6 +14,6 @@ gzip -k -f Packages
 # Build Release file
 apt-ftparchive release . > Release
 
-gpg --default-key CF7F439E4E336DC2 -abs --output Release.gpg Release
-gpg --default-key CF7F439E4E336DC2 -abs --clearsign --output InRelease Release
-gpg --output CPOS.gpg --armor --export CF7F439E4E336DC2
+gpg --default-key $KEYID -abs --output Release.gpg Release
+gpg --default-key $KEYID -abs --clearsign --output InRelease Release
+gpg --output CPOS.gpg --armor --export $KEYID
