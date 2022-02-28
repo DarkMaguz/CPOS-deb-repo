@@ -44,21 +44,24 @@ def getFile(url, fileName):
       curl.setopt(curl.CONNECTTIMEOUT, 30)
       curl.perform()
       responseCode = curl.getinfo(curl.RESPONSE_CODE)
-      curl.close()
   except Exception as e:
     print('getFile() error: %s' % (url, e))
   finally:
+    curl.close()
     return responseCode
 
+def getLocation(header):
+  for line in header.split('\n'):
+    if line.find('location:') >= 0:
+      return line
+  raise 'Failed to get location from header'
 
-location = getHeader('https://discord.com/api/download?platform=linux&format=deb')
-#location = 'location: https://dl.discordapp.net/apps/linux/0.0.17/discord-0.0.17.deb'
+
+header = getHeader('https://discord.com/api/download?platform=linux&format=deb')
+location = getLocation(header)
 discordDebUrl = location.split()[-1]
 versionAvailable = discordDebUrl.split('/')[-2]
 debFile = discordDebUrl.split('/')[-1]
-
-print('versionAvailable:', versionAvailable)
-#print('debFile:', debFile)
 
 # First of all, open the cache
 cache = apt.Cache()
@@ -74,7 +77,7 @@ try:
 except Exception as e:
   pass
 
-
+print('versionAvailable:', versionAvailable)
 print('currentVersion:', currentVersion)
 if currentVersion != versionAvailable:
   getFile(discordDebUrl, debFile)
