@@ -5,13 +5,7 @@ import glob
 
 debDirList = ['discord', 'firefox']
 baseDir = os.getcwd()
-repoBasePath = os.environ.get('REPOSITORY_BASE_PATH')
-repoDebPath = os.path.join(repoBasePath, "repo/amd64")
-
-if not repoBasePath:
-  raise 'REPOSITORY_BASE_PATH environment variable is not defined'
-if not os.path.exists(repoBasePath):
-  raise 'REPOSITORY_BASE_PATH environment variable is not a valid path'
+repoDebPath = os.path.join(baseDir, "repo/amd64")
 
 updatedDebFiles = []
 for debDir in debDirList:
@@ -27,5 +21,5 @@ for debDir in debDirList:
       os.remove(file)
 
 if updatedDebFiles:
-  os.chdir(repoBasePath)
-  status = os.system('./refresh-repo.sh')
+  os.chdir(baseDir)
+  os.system('./refresh-repo.sh')
