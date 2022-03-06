@@ -39,7 +39,7 @@ echo "Latest version: $LATEST_VERSION"
 
 # Get current version.
 apt-get update -y
-CURRENT_VERSION=$(apt-cache show unity-lts 2> /dev/null | grep "Version:" | cut -d' ' -f2 || echo "")
+CURRENT_VERSION=$(apt-cache show unity-lts 2> /dev/null | grep --max-count 1 "Version:" | cut -d' ' -f2)
 echo "Current version: $CURRENT_VERSION"
 
 # Check if we have the latest version.
