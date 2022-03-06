@@ -29,7 +29,7 @@ wget -q https://public-cdn.cloud.unity3d.com/hub/prod/releases-linux.json
 
 # Get latest version available.
 LATEST_VERSION=$(jshon -F releases-linux.json -e official -e -1 -e version | tr -d "\"")
-if [ -z $LATEST_VERSION ]; then
+if [ -z "$LATEST_VERSION" ]; then
   echo "Failed to get the latest version of Unity!"
   echo "Terminating..."
   cleanup
@@ -44,8 +44,8 @@ echo "Current version: $CURRENT_VERSION"
 
 # Check if we have the latest version.
 UPDATE=""
-if [ -z $CURRENT_VERSION ]; then
   UPDATE=true
+if [ -z "$CURRENT_VERSION" ]; then
 elif [ "$LATEST_VERSION" != "$CURRENT_VERSION" ]; then
   UPDATE=true
 fi
