@@ -43,14 +43,14 @@ CURRENT_VERSION=$(apt-cache show unity-lts 2> /dev/null | grep "Version:" | cut 
 echo "Current version: $CURRENT_VERSION"
 
 # Check if we have the latest version.
-UPDATE=""
-  UPDATE=true
+UPDATE="false"
 if [ -z "$CURRENT_VERSION" ]; then
+  UPDATE="true"
 elif [ "$LATEST_VERSION" != "$CURRENT_VERSION" ]; then
-  UPDATE=true
+  UPDATE="true"
 fi
 
-if [ $UPDATE ]; then
+if [ "$UPDATE" != "false" ]; then
   # Get the archive URL.
   ARCHIVE_URL=$(jshon -F releases-linux.json -e official -e -1 -e downloadUrl | tr -d "\"" | tr -d "\\")
   if [ -z $ARCHIVE_URL ]; then
