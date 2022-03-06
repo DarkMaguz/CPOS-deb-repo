@@ -20,7 +20,7 @@ fi
 # Clean up.
 cleanup() {
   rm -rf $BASE_DIR
-  rm -f releases-linux.json
+  rm -f releases-linux.json*
   rm -f *.tar.*
 }
 
