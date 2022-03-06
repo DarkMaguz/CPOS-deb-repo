@@ -9,7 +9,9 @@ repoDebPath = os.path.join(baseDir, "repo/amd64")
 
 updatedDebFiles = []
 for debDir in debDirList:
-  print('building: ', debDir)
+  print('########################', flush=True)
+  print('Running: ', debDir, flush=True)
+  print('########################', flush=True)
   os.chdir(os.path.join(baseDir, debDir))
   status = os.system('./build-deb.sh')
   debFiles = glob.glob('*.deb')
