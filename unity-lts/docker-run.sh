@@ -53,7 +53,7 @@ fi
 
 if [ "$UPDATE" != "false" ]; then
   # Get the archive URL.
-  ARCHIVE_URL=$(jshon -F releases-linux.json -e official -e -1 -e downloadUrl | tr -d "\"" | tr -d "\\")
+  ARCHIVE_URL=$(jshon -F releases-linux.json -e official -e -1 -e downloadUrl | tr -d '\"' | tr -d '\\')
   if [ -z $ARCHIVE_URL ]; then
     echo "Failed to get the URL for the Unity archive!"
     cleanup
