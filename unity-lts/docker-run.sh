@@ -1,5 +1,10 @@
 #!/bin/sh -e
 
+DISPLAY=:99.0
+export DISPLAY
+/etc/init.d/xvfb start
+/etc/init.d/xvfb status
+
 # Find any existing deb files and delete them.
 for OLD_DEB in unity-lts*.deb*
 do
@@ -20,15 +25,14 @@ fi
 # Clean up.
 cleanup() {
   rm -rf $BASE_DIR
-  rm -f releases-linux.json*
-  rm -f *.tar.*
+  rm -f lts-releases.xml*
 }
 
 # Get available versions.
-wget -q https://public-cdn.cloud.unity3d.com/hub/prod/releases-linux.json
+wget -U "NoZilla/5.0" -q https://unity.com/releases/editor/lts-releases.xml
 
-# Get latest version available.
-LATEST_VERSION=$(jshon -F releases-linux.json -e official -e -1 -e version | tr -d "\"")
+# Find latest LTS version.
+LATEST_VERSION=$(xmllint --xpath '//channel/item[position() < last()]/title/text()' lts-releases.xml | sort | tail -n 1)
 if [ -z "$LATEST_VERSION" ]; then
   echo "Failed to get the latest version of Unity!"
   echo "Terminating..."
@@ -52,22 +56,16 @@ elif [ "$LATEST_VERSION" != "$CURRENT_VERSION" ]; then
 fi
 
 if [ "$UPDATE" != "false" ]; then
-  # Get the archive URL.
-  ARCHIVE_URL=$(jshon -F releases-linux.json -e official -e -1 -e downloadUrl | tr -d '\"' | tr -d '\\')
-  if [ -z $ARCHIVE_URL ]; then
-    echo "Failed to get the URL for the Unity archive!"
-    cleanup
-    exit 1
-  fi
+  INSTALL_MODULES="webgl android documentation"
 
-  # Download unity.
-  wget $ARCHIVE_URL
-
-  # Get name of the archive file.
-  UNITY_ARCHIVE=$(echo $ARCHIVE_URL | rev | cut -d'/' -f1 | rev)
-
-  # Extract the archive.
-  tar -xvf $UNITY_ARCHIVE -C $UNITY_PATH
+  unityhub --headless install-path \
+      --no-sandbox \
+      --set $UNITY_PATH
+  unityhub --headless install \
+      --no-sandbox \
+      --version $LATEST_VERSION \
+      --module $INSTALL_MODULES \
+      --childModules
 
   # Make applications folder if missing.
   if [ ! -d "$BASE_DIR/usr/share/applications" ]; then
@@ -75,8 +73,8 @@ if [ "$UPDATE" != "false" ]; then
   fi
 
   # Insert Gnome desktop shortcut.
-  cp -f Unity-STL.desktop $BASE_DIR/usr/share/applications/Unity-STL.desktop
-  sed -i "s/VERSION/$LATEST_VERSION/g" $BASE_DIR/usr/share/applications/Unity-STL.desktop
+  cp -f Unity-LTS.desktop $BASE_DIR/usr/share/applications/Unity-LTS.desktop
+  sed -i "s/VERSION/$LATEST_VERSION/g" $BASE_DIR/usr/share/applications/Unity-LTS.desktop
 
   # Make DEBIAN folder if missing.
   if [ ! -d "$BASE_DIR/DEBIAN" ]; then
