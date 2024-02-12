@@ -21,7 +21,7 @@ gpg --pinentry-mode loopback --passphrase $PASS --default-key $KEYID -abs --clea
 gpg --output ${TMP_DIR}/CPOS.gpg --armor --export $KEYID
 
 # Overwrite existing files in repo directory.
-cp -f ${TMP_DIR}/* .
+cp -fp ${TMP_DIR}/* .
 
 # Clean up.
 rm -rf ${TMP_DIR}
