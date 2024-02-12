@@ -13,7 +13,7 @@ apt-ftparchive packages amd64/ > ${TMP_DIR}/Packages
 gzip -k -f ${TMP_DIR}/Packages
 
 # Build Release file
-apt-ftparchive release . > ${TMP_DIR}/Release
+apt-ftparchive release ${TMP_DIR}/ > ${TMP_DIR}/Release
 
 # Generate GPG signed files.
 gpg --pinentry-mode loopback --passphrase $PASS --default-key $KEYID -abs --output ${TMP_DIR}/Release.gpg ${TMP_DIR}/Release
