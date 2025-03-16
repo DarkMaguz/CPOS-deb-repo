@@ -3,7 +3,8 @@
 import os
 import glob
 
-debDirList = ['discord', 'firefox', 'unity-lts']
+#'unity-lts'
+debDirList = ['discord', 'firefox']
 baseDir = os.getcwd()
 repoDebPath = os.path.join(baseDir, "repo/amd64")
 
