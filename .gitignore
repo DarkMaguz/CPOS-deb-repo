@@ -1,3 +1,7 @@
 gnupg/
 repo/
 repo
+
+*.deb
+*.gz
+*.zip
