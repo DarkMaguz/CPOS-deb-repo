@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 RUN apt-get update -y
 RUN apt-get install -y wget libxml2-utils tar bzip2 coreutils grep sed xz-utils
