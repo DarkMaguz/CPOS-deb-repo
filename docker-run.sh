@@ -16,8 +16,8 @@ gzip -k -f ${TMP_DIR}/Packages
 apt-ftparchive release ${TMP_DIR}/ > ${TMP_DIR}/Release
 
 # Generate GPG signed files.
-gpg --pinentry-mode loopback --passphrase $PASS --default-key $KEYID -abs --output ${TMP_DIR}/Release.gpg ${TMP_DIR}/Release
-gpg --pinentry-mode loopback --passphrase $PASS --default-key $KEYID -abs --clearsign --output ${TMP_DIR}/InRelease ${TMP_DIR}/Release
+gpg --pinentry-mode loopback --passphrase $PASS -abs --output ${TMP_DIR}/Release.gpg ${TMP_DIR}/Release
+gpg --pinentry-mode loopback --passphrase $PASS -abs --clearsign --output ${TMP_DIR}/InRelease ${TMP_DIR}/Release
 gpg --output ${TMP_DIR}/CPOS.gpg --armor --export $KEYID
 
 # Overwrite existing files in repo directory.
