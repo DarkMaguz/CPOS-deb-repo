@@ -8,6 +8,14 @@ debDirList = ['discord', 'firefox']
 baseDir = os.getcwd()
 repoDebPath = os.path.join(baseDir, "repo/amd64")
 
+print('########################', flush=True)
+print('#     Build Config     #', flush=True)
+print('------------------------', flush=True)
+print('Targets: ', debDirList, flush=True)
+print('Base Dir: ', baseDir, flush=True)
+print('Repo Deb Path: ', repoDebPath, flush=True)
+print('########################', flush=True)
+
 updatedDebFiles = []
 for debDir in debDirList:
   print('########################', flush=True)
