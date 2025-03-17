@@ -66,7 +66,11 @@ debFile = discordDebUrl.split('/')[-1]
 # First of all, open the cache
 cache = apt.Cache()
 # Now, lets update the package list
-cache.update()
+try:
+  cache.update()
+except Exception as e:
+  print('Failed to update apt cache:', e)
+  print('Attempting to continue...')
 # We need to re-open the cache because it needs to read the package list
 cache.open(None)
 
@@ -80,5 +84,6 @@ except Exception as e:
 print('versionAvailable:', versionAvailable)
 print('currentVersion:', currentVersion)
 if currentVersion != versionAvailable:
+  print('Download discord version: ', versionAvailable)
   getFile(discordDebUrl, debFile)
   os.chown(debFile, int(os.environ.get('USERID')), int(os.environ.get('GROUPID')))
