@@ -11,6 +11,6 @@ docker run \
   --rm \
   -e USERID=$(id -u $USER) \
   -e GROUPID=$(id -g $USER) \
-  -v $(pwd)/:/build \
+  -v "$(pwd)/:/build" \
   -v "$REPO_DIR:/deb" \
   $IMAGE_NAME
