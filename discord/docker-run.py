@@ -59,36 +59,36 @@ def getLocation(header):
 
 
 def main():
-header = getHeader('https://discord.com/api/download?platform=linux&format=deb')
-location = getLocation(header)
-discordDebUrl = location.split()[-1]
-versionAvailable = discordDebUrl.split('/')[-2]
-debFile = os.path.join("/deb", discordDebUrl.split('/')[-1])
+  header = getHeader('https://discord.com/api/download?platform=linux&format=deb')
+  location = getLocation(header)
+  discordDebUrl = location.split()[-1]
+  versionAvailable = discordDebUrl.split('/')[-2]
+  debFile = os.path.join("/deb", discordDebUrl.split('/')[-1])
 
-# First of all, open the cache
-cache = apt.Cache()
-# Now, lets update the package list
-try:
-  cache.update()
-except Exception as e:
-  print('Failed to update apt cache:', e)
-  print('Attempting to continue...')
-# We need to re-open the cache because it needs to read the package list
-cache.open(None)
+  # First of all, open the cache
+  cache = apt.Cache()
+  # Now, lets update the package list
+  try:
+    cache.update()
+  except Exception as e:
+    print('Failed to update apt cache:', e)
+    print('Attempting to continue...')
+  # We need to re-open the cache because it needs to read the package list
+  cache.open(None)
 
-currentVersion = ''
-try:
-  pkg = cache['discord']
-  currentVersion = pkg.versions[0].version
-except Exception as e:
-  pass
+  currentVersion = ''
+  try:
+    pkg = cache['discord']
+    currentVersion = pkg.versions[0].version
+  except Exception as e:
+    pass
 
-print('versionAvailable:', versionAvailable)
-print('currentVersion:', currentVersion)
-if currentVersion != versionAvailable:
-  print('Download discord version: ', versionAvailable)
-  getFile(discordDebUrl, debFile)
-  os.chown(debFile, int(os.environ.get('USERID')), int(os.environ.get('GROUPID')))
+  print('versionAvailable:', versionAvailable)
+  print('currentVersion:', currentVersion)
+  if currentVersion != versionAvailable:
+    print('Download discord version: ', versionAvailable)
+    getFile(discordDebUrl, debFile)
+    os.chown(debFile, int(os.environ.get('USERID')), int(os.environ.get('GROUPID')))
 
 
 if __name__ == '__main__':
