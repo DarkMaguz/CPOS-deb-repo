@@ -32,8 +32,8 @@ def main():
       print(dir, success)
       if not success or os.environ.get('DEBUG'):
         print(log[0].decode('utf-8'), flush=True)
-        # print(log[1].decode('utf-8'), flush=True)
   subprocess.run("./refresh-repo.sh")
+        print(log[1].decode('utf-8'), flush=True)
 
 if __name__ == '__main__':
   main()
