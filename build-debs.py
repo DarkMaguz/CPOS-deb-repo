@@ -1,7 +1,8 @@
 #!/bin/python3
 
 import os
-import glob
+import subprocess
+import concurrent.futures
 
 #'unity-lts'
 debDirList = ['discord', 'firefox']
@@ -17,21 +18,22 @@ if os.environ.get('DEBUG'):
   print('Repo Deb Path: ', repoDebPath, flush=True)
   print('########################', flush=True)
 
-updatedDebFiles = []
-for debDir in debDirList:
-  print('########################', flush=True)
-  print('Running: ', debDir, flush=True)
-  print('########################', flush=True)
-  os.chdir(os.path.join(baseDir, debDir))
-  status = os.system('./build-deb.sh')
-  debFiles = glob.glob('*.deb')
-  for file in debFiles:
-    if status == 0:
-      os.system('mv "%s" "%s"' % (file, repoDebPath))
-      updatedDebFiles.append(file)
-    else:
-      os.remove(file)
+def buildDeb(dir):
+  res = None
+  try:
+    res = subprocess.run(["./build-deb.sh", dir, repoDebPath], capture_output=True)
+  except Exception as e:
+    return False, e
+  return res.returncode == 0, [res.stdout, res.stderr]
 
-if updatedDebFiles:
-  os.chdir(baseDir)
-  os.system('./refresh-repo.sh')
+def main():
+  with concurrent.futures.ProcessPoolExecutor(4) as executor:
+    for dir, [success, log] in zip(debDirList, executor.map(buildDeb, debDirList)):
+      print(dir, success)
+      if not success or os.environ.get('DEBUG'):
+        print(log[0].decode('utf-8'), flush=True)
+        # print(log[1].decode('utf-8'), flush=True)
+  subprocess.run("./refresh-repo.sh")
+
+if __name__ == '__main__':
+  main()
