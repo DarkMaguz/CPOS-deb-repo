@@ -6,6 +6,6 @@ mkdir -p gnupg
 mkdir -p repo
 
 docker run -it --rm \
-  -v $(pwd)/gnupg:/home/cpos/.gnupg \
+  -v "$(pwd)/gnupg:/home/cpos/.gnupg" \
   darkmagus/cpos-deb-repo \
   gpg --full-generate-key
