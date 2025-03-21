@@ -88,7 +88,7 @@ if [ "$LATEST_VERSION" != "$CURRENT_VERSION" ]; then
     rm -f $OLD_DEB
   done
 
-  DPKG_NAME=firefox_"$LATEST_VERSION"_amd64.deb
+  DPKG_NAME=/deb/firefox_"$LATEST_VERSION"_amd64.deb
 
   # Build Debian package.
   dpkg-deb --root-owner-group --build $BASE_DIR $DPKG_NAME
