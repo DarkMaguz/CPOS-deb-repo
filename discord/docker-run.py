@@ -7,6 +7,7 @@ from io import BytesIO
 import apt
 
 
+# Discord won't let me use curl's default user-agent, so I'm using this one.
 userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
 
 
@@ -32,7 +33,7 @@ def getHeader(url):
 def getFile(url, fileName):
   responseCode = 0
   try:
-    with open(os.path.join(os.getcwd(), fileName), 'wb') as newFile:
+    with open(fileName, 'wb') as newFile:
       curl = pycurl.Curl()
       curl.setopt(curl.URL, url)
       curl.setopt(curl.USERAGENT, userAgent)
@@ -57,11 +58,12 @@ def getLocation(header):
   raise 'Failed to get location from header'
 
 
+def main():
 header = getHeader('https://discord.com/api/download?platform=linux&format=deb')
 location = getLocation(header)
 discordDebUrl = location.split()[-1]
 versionAvailable = discordDebUrl.split('/')[-2]
-debFile = discordDebUrl.split('/')[-1]
+debFile = os.path.join("/deb", discordDebUrl.split('/')[-1])
 
 # First of all, open the cache
 cache = apt.Cache()
@@ -87,3 +89,7 @@ if currentVersion != versionAvailable:
   print('Download discord version: ', versionAvailable)
   getFile(discordDebUrl, debFile)
   os.chown(debFile, int(os.environ.get('USERID')), int(os.environ.get('GROUPID')))
+
+
+if __name__ == '__main__':
+  main()
